@@ -1,0 +1,1 @@
+To make the console app work, download `sprites.atlas` and `sprites.png` from <https://github.com/Anuken/Mindustry/tree/master/core/assets/sprites> and put them in this folder.

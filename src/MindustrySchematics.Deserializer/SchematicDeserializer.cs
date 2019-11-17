@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MindustrySchematics.Deserializer.Extensions;
+using MindustrySchematics.Deserializer.Helpers;
 using MindustrySchematics.Deserializer.Models;
 
 namespace MindustrySchematics.Deserializer
@@ -20,9 +21,7 @@ namespace MindustrySchematics.Deserializer
 
 			var header = memoryStream.ReadBytes(Header.Length);
 			if (!header.SequenceEqual(Header))
-			{
 				throw new InvalidOperationException("Invalid schematic, did not find expected header bytes.");
-			}
 
 			var version = (byte) memoryStream.ReadByte();
 
@@ -40,11 +39,11 @@ namespace MindustrySchematics.Deserializer
 			}
 
 			var blockCount = inflater.ReadByte();
-			var blockNames = new List<string>(blockCount);
+			var blockNames = new string[blockCount];
 			for (var i = 0; i < blockCount; i++)
 			{
 				var blockName = inflater.ReadUTF() ?? "air";
-				blockNames.Add(blockName);
+				blockNames[i] = blockName;
 			}
 
 			var tileCount = inflater.ReadInt();
@@ -53,14 +52,25 @@ namespace MindustrySchematics.Deserializer
 			{
 				var blockIndex = inflater.ReadByte();
 				var blockName = blockNames[blockIndex];
-				var position = inflater.ReadInt();
+				var (x, y) = GetPosition(inflater.ReadInt(), height);
 				var config = inflater.ReadInt();
 				var rotation = inflater.ReadByte();
 
-				tiles.Add(new Tile(blockName, position, config, rotation));
+				tiles.Add(new Tile(blockName, x, y, config, rotation));
 			}
 
 			return new Schematic(version, width, height, tags, tiles);
+		}
+
+		private static (int X, int Y) GetPosition(int position, int schematicHeight)
+		{
+			var x = MindustryPositionHelper.X(position);
+			var y = MindustryPositionHelper.Y(position);
+
+			// For some reason, Y is flipped vertically :\
+			y = (short)(schematicHeight - 1 - y);
+
+			return (x, y);
 		}
 	}
 }
