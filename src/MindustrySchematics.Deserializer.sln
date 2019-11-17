@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29430.225
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MindustrySchematics.Deserializer.ConsoleApp", "MindustrySchematics.Deserializer.ConsoleApp\MindustrySchematics.Deserializer.ConsoleApp.csproj", "{F3B3F49A-5B3C-4669-90AB-BABBC18ED2D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MindustrySchematics.Deserializer", "MindustrySchematics.Deserializer\MindustrySchematics.Deserializer.csproj", "{B103C4AC-BC0D-4816-B283-F055F7AEF7D0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F3B3F49A-5B3C-4669-90AB-BABBC18ED2D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3B3F49A-5B3C-4669-90AB-BABBC18ED2D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3B3F49A-5B3C-4669-90AB-BABBC18ED2D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3B3F49A-5B3C-4669-90AB-BABBC18ED2D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B103C4AC-BC0D-4816-B283-F055F7AEF7D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B103C4AC-BC0D-4816-B283-F055F7AEF7D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B103C4AC-BC0D-4816-B283-F055F7AEF7D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B103C4AC-BC0D-4816-B283-F055F7AEF7D0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A06307CF-709B-42C0-8DBF-9E8AB4FB7E22}
+	EndGlobalSection
+EndGlobal
