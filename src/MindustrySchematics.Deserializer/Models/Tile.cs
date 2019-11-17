@@ -1,4 +1,6 @@
-﻿namespace MindustrySchematics.Deserializer.Models
+﻿using MindustrySchematics.Deserializer.Helpers;
+
+namespace MindustrySchematics.Deserializer.Models
 {
 	public class Tile
 	{
@@ -15,8 +17,8 @@
 		internal Tile(int type, int position, int config, byte rotation)
 		{
 			Type = type;
-			X = Pos.X(position);
-			Y = Pos.Y(position);
+			X = MindustryPositionHelper.X(position);
+			Y = MindustryPositionHelper.Y(position);
 			Config = config;
 			Rotation = rotation;
 		}
