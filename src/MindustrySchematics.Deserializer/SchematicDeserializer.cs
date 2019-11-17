@@ -51,15 +51,16 @@ namespace MindustrySchematics.Deserializer
 			var tiles = new List<Tile>();
 			for (var i = 0; i < tileCount; i++)
 			{
-				var type = inflater.ReadByte();
+				var blockIndex = inflater.ReadByte();
+				var blockName = blockNames[blockIndex];
 				var position = inflater.ReadInt();
 				var config = inflater.ReadInt();
 				var rotation = inflater.ReadByte();
 
-				tiles.Add(new Tile(type, position, config, rotation));
+				tiles.Add(new Tile(blockName, position, config, rotation));
 			}
 
-			return new Schematic(version, width, height, tags, blockNames, tiles);
+			return new Schematic(version, width, height, tags, tiles);
 		}
 	}
 }

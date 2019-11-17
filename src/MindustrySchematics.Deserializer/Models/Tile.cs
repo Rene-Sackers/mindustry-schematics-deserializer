@@ -4,7 +4,7 @@ namespace MindustrySchematics.Deserializer.Models
 {
 	public class Tile
 	{
-		public int Type { get; set; }
+		public string BlockName { get; }
 
 		public int X { get; set; }
 
@@ -14,11 +14,11 @@ namespace MindustrySchematics.Deserializer.Models
 
 		public byte Rotation { get; set; }
 
-		internal Tile(int type, int position, int config, byte rotation)
+		internal Tile(string blockName, int position, int config, byte rotation)
 		{
-			Type = type;
 			X = MindustryPositionHelper.X(position);
 			Y = MindustryPositionHelper.Y(position);
+			BlockName = blockName;
 			Config = config;
 			Rotation = rotation;
 		}

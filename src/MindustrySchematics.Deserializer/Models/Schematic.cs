@@ -17,17 +17,14 @@ namespace MindustrySchematics.Deserializer.Models
 
 		public IReadOnlyDictionary<string, string> Tags { get; }
 
-		public IEnumerable<string> BlockNames { get; }
-
 		public IReadOnlyCollection<Tile> Tiles { get; }
 
-		internal Schematic(byte version, int width, int height, Dictionary<string, string> tags, IEnumerable<string> blockNames, IEnumerable<Tile> tiles)
+		internal Schematic(byte version, int width, int height, Dictionary<string, string> tags, IEnumerable<Tile> tiles)
 		{
 			Version = version;
 			Width = width;
 			Height = height;
 			Tags = tags;
-			BlockNames = blockNames;
 			Tiles = tiles.ToList();
 		}
 	}

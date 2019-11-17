@@ -14,7 +14,7 @@ namespace MindustrySchematics.Deserializer.ConsoleApp
 
 			var tagsString = string.Join("\n\t", schematic.Tags.Select(t => $"{t.Key} = {t.Value}").ToArray());
 			var tilesString = string.Join("\n\t", schematic.Tiles.Select(t =>
-				$"Type: {t.Type}\n" +
+				$"Block: {t.BlockName}\n" +
 				$"\tConfig: {t.Config}\n" +
 				$"\tX,Y: {t.X},{t.Y}\n" +
 				$"\tRotation: {t.Rotation}\n").ToArray());
@@ -24,7 +24,6 @@ namespace MindustrySchematics.Deserializer.ConsoleApp
 				$"Width: {schematic.Width}\n" +
 				$"Height: {schematic.Height}\n" +
 				$"Version: {schematic.Version}\n" +
-				$"Block names:\n\t{string.Join("\n\t", schematic.BlockNames.ToArray())}\n" +
 				$"Tags:\n\t{tagsString}\n" +
 				$"Tiles:\n\t{tilesString}");
 
