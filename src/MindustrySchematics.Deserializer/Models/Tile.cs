@@ -14,11 +14,13 @@ namespace MindustrySchematics.Deserializer.Models
 
 		public byte Rotation { get; set; }
 
-		internal Tile(string blockName, int position, int config, byte rotation)
+		internal Tile(string blockName, int x, int y, int config, byte rotation)
 		{
-			X = MindustryPositionHelper.X(position);
-			Y = MindustryPositionHelper.Y(position);
+			//X = MindustryPositionHelper.X(position);
+			//Y = MindustryPositionHelper.Y(position);
 			BlockName = blockName;
+			X = x;
+			Y = y;
 			Config = config;
 			Rotation = rotation;
 		}

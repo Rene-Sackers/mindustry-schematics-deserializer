@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <Content Include="Schematics\test.msch">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Sprites\sprites.atlas">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
