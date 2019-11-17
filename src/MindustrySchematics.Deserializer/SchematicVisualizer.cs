@@ -12,50 +12,17 @@ namespace MindustrySchematics.Deserializer
 	{
 		private const int PixelsPerTile = 32;
 
-		private static readonly Dictionary<string, BlockRenderModifier> BlockRenderModifiers = new Dictionary<string, BlockRenderModifier>
+		private static readonly Dictionary<string, string[]> BlockRenderModifiers = new Dictionary<string, string[]>
 		{
-			{"conveyor", new BlockRenderModifier
-			{
-				AlternativeSprites = new [] { "conveyor-0-0" }
-			}},
-			{"titanium-conveyor", new BlockRenderModifier
-			{
-				AlternativeSprites = new [] { "titanium-conveyor-0-0" }
-			}},
-			{"pulse-conduit", new BlockRenderModifier
-			{
-				AlternativeSprites = new [] { "pulse-conduit-top-0" }
-			}},
-			{"armored-conveyor", new BlockRenderModifier
-			{
-				AlternativeSprites = new [] { "armored-conveyor-0-0" }
-			}},
-			{"conduit", new BlockRenderModifier
-			{
-				AlternativeSprites = new [] { "conduit-top-0" }
-			}},
-			{"thorium-reactor", new BlockRenderModifier
-			{
-				XPositionModifier = -1,
-				YPositionModifier = -1,
-				AlternativeSprites = new [] { "thorium-reactor" }
-			}},
-			{"mass-driver", new BlockRenderModifier
-			{
-				XPositionModifier = -1,
-				YPositionModifier = -1,
-				AlternativeSprites = new [] { "mass-driver-base", "mass-driver" }
-			}},
-			{"cryofluidmixer", new BlockRenderModifier
-			{
-				YPositionModifier = -1,
-				AlternativeSprites = new [] { "cryofluidmixer-bottom", "cryofluidmixer-top" }
-			}},
-			{"phase-weaver", new BlockRenderModifier
-			{
-				YPositionModifier = -1,
-				AlternativeSprites = new [] { "phase-weaver", "phase-weaver-weave" }
-			}}
+			{"conveyor", new [] { "conveyor-0-0" }},
+			{"titanium-conveyor", new [] { "titanium-conveyor-0-0" }},
+			{"pulse-conduit", new [] { "pulse-conduit-top-0" }},
+			{"armored-conveyor", new [] { "armored-conveyor-0-0" }},
+			{"conduit", new [] { "conduit-top-0" }},
+			{"thorium-reactor", new [] { "thorium-reactor" }},
+			{"mass-driver",  new [] { "mass-driver-base", "mass-driver" }},
+			{"cryofluidmixer", new [] { "cryofluidmixer-bottom", "cryofluidmixer-top" }},
+			{"phase-weaver", new [] { "phase-weaver", "phase-weaver-weave" }}
 		};
 
 		public static void Visualize(Schematic schematic, SpriteAtlas spriteAtlas, string destinationPath)
@@ -95,52 +62,30 @@ namespace MindustrySchematics.Deserializer
 		private static void RenderTileToImage(ref Image<Rgba32> finalImage, Tile tile, SpriteSet spriteSet, Image spriteMap)
 		{
 			var renderModifier = BlockRenderModifiers.ContainsKey(tile.BlockName) ? BlockRenderModifiers[tile.BlockName] : null;
-			var rotateMode = RotateModeFromTileRotation(tile);
 
 			if (renderModifier == null)
 			{
-				RenderSpriteToImage(ref finalImage, rotateMode, tile.X, tile.Y, spriteSet, spriteMap, tile.BlockName, true);
+				RenderSpriteToImage(ref finalImage, tile, spriteSet, spriteMap, tile.BlockName);
 				return;
 			}
 
-			if (renderModifier.AlternativeSprites == null)
+			foreach (var spriteName in renderModifier)
 			{
 				RenderSpriteToImage(
 					ref finalImage,
-					rotateMode,
-					tile.X + renderModifier.XPositionModifier,
-					tile.Y + renderModifier.YPositionModifier,
+					tile,
 					spriteSet,
 					spriteMap,
-					tile.BlockName,
-					false);
-				return;
-			}
-
-			// Render multiple sprites
-			foreach (var spriteName in renderModifier.AlternativeSprites)
-			{
-				RenderSpriteToImage(
-					ref finalImage,
-					rotateMode,
-					tile.X + renderModifier.XPositionModifier,
-					tile.Y + renderModifier.YPositionModifier,
-					spriteSet,
-					spriteMap,
-					spriteName,
-					false);
+					spriteName);
 			}
 		}
 
 		private static void RenderSpriteToImage(
 			ref Image<Rgba32> finalImage,
-			RotateMode rotateMode,
-			int x,
-			int y,
+			Tile tile,
 			SpriteSet spriteSet,
 			Image spriteMap,
-			string spriteName,
-			bool applyPositionFix)
+			string spriteName)
 		{
 			if (!spriteSet.Sprites.ContainsKey(spriteName))
 				return;
@@ -149,6 +94,8 @@ namespace MindustrySchematics.Deserializer
 			if (sprite == null)
 				return;
 
+			var rotateMode = RotateModeFromTileRotation(tile);
+
 			var spriteImage = spriteMap
 				.Clone(ctx =>
 				{
@@ -156,25 +103,28 @@ namespace MindustrySchematics.Deserializer
 					ctx.Rotate(rotateMode);
 				});
 
-			// For 2 block wide blocks at 0, 0 the schematic actually says 1, 1
-			if (applyPositionFix && sprite.Width >= PixelsPerTile * 2)
+			var renderX = tile.X;
+			var renderY = tile.Y;
+
+			// For 2 block wide blocks at 0, 0 the schematic actually says 0, 1
+			if (sprite.Width >= PixelsPerTile * 2)
 			{
-				y -= 1;
+				renderY -= 1;
 			}
 
-			// For 3 block wide blocks at 0, 0 the schematic actually says 1, 2
-			if (applyPositionFix && sprite.Width >= PixelsPerTile * 3)
+			// For 3 block wide blocks at 0, 0 the schematic actually says 1, 1
+			if (sprite.Width >= PixelsPerTile * 3)
 			{
-				x -= 1;
+				renderX -= 1;
 			}
 
-			// For 3 block wide blocks at 0, 0 the schematic actually says 1, 2
-			if (applyPositionFix && sprite.Width >= PixelsPerTile * 4)
+			// For 4 block wide blocks at 0, 0 the schematic actually says 1, 2
+			if (sprite.Width >= PixelsPerTile * 4)
 			{
-				y -= 1;
+				renderY -= 1;
 			}
 
-			var spritePoint = new Point(x * PixelsPerTile, y * PixelsPerTile);
+			var spritePoint = new Point(renderX * PixelsPerTile, renderY * PixelsPerTile);
 
 			finalImage = finalImage
 				.Clone(ctx => ctx.DrawImage(spriteImage, spritePoint, 1));
@@ -191,14 +141,5 @@ namespace MindustrySchematics.Deserializer
 			using var destinationFileStream = File.Create(destinationPath);
 			fromSprite.SaveAsPng(destinationFileStream);
 		}
-	}
-
-	internal class BlockRenderModifier
-	{
-		public int XPositionModifier { get; set; }
-
-		public int YPositionModifier { get; set; }
-
-		public string[] AlternativeSprites { get; set; }
 	}
 }
