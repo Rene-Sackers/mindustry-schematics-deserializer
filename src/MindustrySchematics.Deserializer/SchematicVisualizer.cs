@@ -32,6 +32,20 @@ namespace MindustrySchematics.Deserializer
 			{"oil-extractor", new [] { "oil-extractor", "oil-extractor-rotator", "oil-extractor-top" }},
 			{"liquid-tank", new [] { "liquid-tank-bottom", "liquid-tank-top" }},
 			{"liquid-router", new [] { "liquid-router-bottom", "liquid-router-top" }},
+			{"draug-factory", new [] { "draug-factory", "draug-factory-top" }},
+			{"spirit-factory", new [] { "spirit-factory", "spirit-factory-top" }},
+			{"phantom-factory", new [] { "phantom-factory", "phantom-factory-top" }},
+			{"wraith-factory", new [] { "wraith-factory", "wraith-factory-top" }},
+			{"ghoul-factory", new [] { "ghoul-factory", "ghoul-factory-top" }},
+			{"revenant-factory", new [] { "revenant-factory", "revenant-factory-top" }},
+			{"dagger-factory", new [] { "dagger-factory", "dagger-factory-top" }},
+			{"crawler-factory", new [] { "crawler-factory", "crawler-factory-top" }},
+			{"titan-factory", new [] { "titan-factory", "titan-factory-top" }},
+			{"fortress-factory", new [] { "fortress-factory", "fortress-factory-top" }},
+			{"scrap-wall-huge", new [] { "scrap-wall-huge1" }},
+			{"scrap-wall-large", new [] { "scrap-wall-large1" }},
+			{"scrap-wall", new [] { "scrap-wall1" }},
+			{"pulverizer", new [] { "pulverizer", "pulverizer-rotator" }},
 		};
 
 		public static void Visualize(Schematic schematic, SpriteAtlas spriteAtlas, string destinationPath)

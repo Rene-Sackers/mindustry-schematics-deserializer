@@ -51,8 +51,6 @@ namespace MindustrySchematics.Deserializer.ConsoleApp
 			//SchematicVisualizer.RenderSprite(atlasSpriteSet.Sprites["pulse-conduit-top-0"], "sprites-render/pulse-conduit-top-0.png");
 
 			SchematicVisualizer.Visualize(schematic, atlas, "sprites-render/schematic.png");
-
-			Console.ReadKey();
 		}
 
 		private static string GetFileBase64(string path)
