@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using MindustrySchematics.Deserializer.Models;
 
 namespace MindustrySchematics.Deserializer.ConsoleApp
 {
@@ -26,6 +28,11 @@ namespace MindustrySchematics.Deserializer.ConsoleApp
 				$"Version: {schematic.Version}\n" +
 				$"Tags:\n\t{tagsString}\n" +
 				$"Tiles:\n\t{tilesString}");
+
+			var atlas = SpriteAtlas.FromFile("Sprites/sprites.atlas");
+			var sprite = atlas.SpriteSets["sprites.png"].Sprites["armored-conveyor-0-1"];
+
+			SchematicVisualizer.RenderSprite(sprite, "sprite.png");
 
 			Console.ReadKey();
 		}

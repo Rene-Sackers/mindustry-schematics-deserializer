@@ -7,11 +7,19 @@
 
   <ItemGroup>
     <None Remove="Schematics\test.msch" />
+    <None Remove="Sprites\sprites.atlas" />
+    <None Remove="Sprites\sprites.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Schematics\test.msch">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sprites\sprites.atlas">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sprites\sprites.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
