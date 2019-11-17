@@ -22,7 +22,16 @@ namespace MindustrySchematics.Deserializer
 			{"thorium-reactor", new [] { "thorium-reactor" }},
 			{"mass-driver",  new [] { "mass-driver-base", "mass-driver" }},
 			{"cryofluidmixer", new [] { "cryofluidmixer-bottom", "cryofluidmixer-top" }},
-			{"phase-weaver", new [] { "phase-weaver", "phase-weaver-weave" }}
+			{"phase-weaver", new [] { "phase-weaver", "phase-weaver-weave" }},
+			{"mechanical-drill", new [] { "mechanical-drill", "mechanical-drill-rotator", "mechanical-drill-top" }},
+			{"pneumatic-drill", new [] { "pneumatic-drill", "pneumatic-drill-rotator", "pneumatic-drill-top" }},
+			{"laser-drill", new [] { "laser-drill", "laser-drill-rotator", "laser-drill-top" }},
+			{"blast-drill", new [] { "blast-drill", "blast-drill-rotator", "blast-drill-top" }},
+			{"water-extractor", new [] { "water-extractor", "water-extractor-rotator", "water-extractor-top" }},
+			{"cultivator", new [] { "cultivator", "cultivator-top" }},
+			{"oil-extractor", new [] { "oil-extractor", "oil-extractor-rotator", "oil-extractor-top" }},
+			{"liquid-tank", new [] { "liquid-tank-bottom", "liquid-tank-top" }},
+			{"liquid-router", new [] { "liquid-router-bottom", "liquid-router-top" }},
 		};
 
 		public static void Visualize(Schematic schematic, SpriteAtlas spriteAtlas, string destinationPath)
