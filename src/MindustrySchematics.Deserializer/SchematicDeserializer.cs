@@ -14,14 +14,6 @@ namespace MindustrySchematics.Deserializer
 	{
 		private static readonly byte[] Header = Encoding.UTF8.GetBytes("msch");
 
-		private static readonly Dictionary<string, (short x, short y)> BlockPositionModifiers = new Dictionary<string, (short x, short y)>
-		{
-			//{ "thorium-reactor", (-1, -1) },
-			//{ "distributor", (0, -1) },
-			//{ "distributor", (0, -1) },
-			//{ "mass-driver", (0, -1) },
-		};
-
 		public static async Task<Schematic> Deserialize(string base64)
 		{
 			var bytes = Convert.FromBase64String(base64);
@@ -29,9 +21,7 @@ namespace MindustrySchematics.Deserializer
 
 			var header = memoryStream.ReadBytes(Header.Length);
 			if (!header.SequenceEqual(Header))
-			{
 				throw new InvalidOperationException("Invalid schematic, did not find expected header bytes.");
-			}
 
 			var version = (byte) memoryStream.ReadByte();
 
@@ -62,7 +52,7 @@ namespace MindustrySchematics.Deserializer
 			{
 				var blockIndex = inflater.ReadByte();
 				var blockName = blockNames[blockIndex];
-				var (x, y) = GetPosition(blockName, inflater.ReadInt(), height);
+				var (x, y) = GetPosition(inflater.ReadInt(), height);
 				var config = inflater.ReadInt();
 				var rotation = inflater.ReadByte();
 
@@ -72,20 +62,13 @@ namespace MindustrySchematics.Deserializer
 			return new Schematic(version, width, height, tags, tiles);
 		}
 
-		private static (int X, int Y) GetPosition(string blockName, int position, int schematicHeight)
+		private static (int X, int Y) GetPosition(int position, int schematicHeight)
 		{
 			var x = MindustryPositionHelper.X(position);
 			var y = MindustryPositionHelper.Y(position);
 
 			// For some reason, Y is flipped vertically :\
 			y = (short)(schematicHeight - 1 - y);
-
-			if (!BlockPositionModifiers.ContainsKey(blockName))
-				return (x, y);
-
-			var (xModifier, yModifier) = BlockPositionModifiers[blockName];
-			x += xModifier;
-			y += yModifier;
 
 			return (x, y);
 		}
