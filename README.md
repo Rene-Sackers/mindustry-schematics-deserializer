@@ -1,6 +1,6 @@
 # Mindustry Schematic Deserializer
 
-A C# (.NET Core) implementation of Mindustry's schematics, allowing you to deserialize and thender them to a .png.
+A C# (.NET Core) implementation of Mindustry's schematics, allowing you to deserialize and then render them to a .png.
 
 `MindustrySchematics.Deserializer.ConsoleApp` has example code on how to use it.
 
@@ -15,6 +15,7 @@ A C# (.NET Core) implementation of Mindustry's schematics, allowing you to deser
 - Render power node connections
 - Render proper conveyor connections (intersections, T-sections, etc.)
 - Calculate required resources
+- Serialize to base64 from C# model
 
 ## Example
 
