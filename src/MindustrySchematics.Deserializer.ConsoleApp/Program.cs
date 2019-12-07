@@ -35,7 +35,13 @@ namespace MindustrySchematics.Deserializer.ConsoleApp
 			Directory.CreateDirectory("sprites-render");
 			SchematicVisualizer.RenderSprite(atlasSpriteSet.Sprites["titanium-conveyor-0-0"], "sprites-render/titanium-conveyor-0-0.png");
 
-			SchematicVisualizer.Visualize(schematic, atlas, "sprites-render/schematic.png");
+			SchematicVisualizer.SaveToFile(schematic, atlas, "sprites-render/schematic.png");
+
+			await using var stream = SchematicVisualizer.RenderToStream(schematic, atlas);
+			await using var file = File.Create("sprites-render/schematic-stream.png");
+			await stream.CopyToAsync(file);
+			await file.FlushAsync();
+			file.Close();
 		}
 
 		private static string GetFileBase64(string path)

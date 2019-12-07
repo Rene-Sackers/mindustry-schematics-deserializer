@@ -1,9 +1,5 @@
 @echo off
 
-dotnet publish ..\src\MindustrySchematics.Deserializer\MindustrySchematics.Deserializer.csproj -c Release /p:Version=1.2.3
-
-@echo off
-
 set version=%1
 if [%version%] neq [] goto askPublish
 set /P version="Version: "
@@ -16,7 +12,7 @@ if /I "%c%" EQU "N" goto :exitCommand
 
 :publish
 dotnet publish ..\src\MindustrySchematics.Deserializer\MindustrySchematics.Deserializer.csproj -c Release /p:Version=%version%
-nuget push ..\src\MindustrySchematics.Deserializer\bin\Release\MindustrySchematics.Deserializer.%version%.nupkg -Source GitHub
+nuget push ..\src\MindustrySchematics.Deserializer\bin\Release\MindustrySchematics.Deserializer.%version%.nupkg -Source "GitHub Rene-Sackers"
 
 pause
 exit

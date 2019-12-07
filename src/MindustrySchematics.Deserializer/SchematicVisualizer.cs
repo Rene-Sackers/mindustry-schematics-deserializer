@@ -48,7 +48,7 @@ namespace MindustrySchematics.Deserializer
 			{"pulverizer", new [] { "pulverizer", "pulverizer-rotator" }},
 		};
 
-		public static void Visualize(Schematic schematic, SpriteAtlas spriteAtlas, string destinationPath)
+		private static Image<Rgba32> RenderImage(Schematic schematic, SpriteAtlas spriteAtlas)
 		{
 			var spriteSet = spriteAtlas.SpriteSets["sprites.png"];
 			using var spriteMap = Image.Load(spriteSet.FilePath);
@@ -59,10 +59,26 @@ namespace MindustrySchematics.Deserializer
 				RenderTileToImage(ref finalImage, tile, spriteSet, spriteMap);
 			}
 
-			using var destinationFileStream = File.Create(destinationPath);
-			finalImage.SaveAsPng(destinationFileStream);
+			return finalImage;
+		}
 
-			finalImage.Dispose();
+		public static void SaveToFile(Schematic schematic, SpriteAtlas spriteAtlas, string destinationPath)
+		{
+			using var image = RenderImage(schematic, spriteAtlas);
+
+			using var destinationFileStream = File.Create(destinationPath);
+			image.SaveAsPng(destinationFileStream);
+		}
+
+		public static Stream RenderToStream(Schematic schematic, SpriteAtlas spriteAtlas)
+		{
+			using var image = RenderImage(schematic, spriteAtlas);
+			var imageStream = new MemoryStream();
+
+			image.SaveAsPng(imageStream);
+			imageStream.Seek(0, SeekOrigin.Begin);
+
+			return imageStream;
 		}
 
 		private static RotateMode RotateModeFromTileRotation(Tile tile)
