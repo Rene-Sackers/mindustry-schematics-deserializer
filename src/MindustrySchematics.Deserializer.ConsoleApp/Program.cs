@@ -12,20 +12,26 @@ namespace MindustrySchematics.Deserializer.ConsoleApp
 		private static async Task Main()
 		{
 			var schematicBase64 = GetFileBase64("./Schematics/test.msch");
-			var schematic = await SchematicDeserializer.Deserialize(schematicBase64);
+			var schematicFromBase64 = await SchematicDeserializer.Deserialize(schematicBase64);
 
-			var tagsString = string.Join("\n\t", schematic.Tags.Select(t => $"{t.Key} = {t.Value}").ToArray());
-			var tilesString = string.Join("\n\t", schematic.Tiles.Select(t =>
+			await using var schematicStream = File.OpenRead("./Schematics/test.msch");
+			var schematicFromFileStream = await SchematicDeserializer.Deserialize(schematicStream);
+
+			var schematicBytes = File.ReadAllBytes("./Schematics/test.msch");
+			var schematicFromBytes = await SchematicDeserializer.Deserialize(schematicBytes);
+
+			var tagsString = string.Join("\n\t", schematicFromBase64.Tags.Select(t => $"{t.Key} = {t.Value}").ToArray());
+			var tilesString = string.Join("\n\t", schematicFromBase64.Tiles.Select(t =>
 				$"Block: {t.BlockName}\n" +
 				$"\tConfig: {t.Config}\n" +
 				$"\tX,Y: {t.X},{t.Y}\n" +
 				$"\tRotation: {t.Rotation}\n").ToArray());
 
 			Console.WriteLine(
-				$"Name: {schematic.Name}\n" +
-				$"Width: {schematic.Width}\n" +
-				$"Height: {schematic.Height}\n" +
-				$"Version: {schematic.Version}\n" +
+				$"Name: {schematicFromBase64.Name}\n" +
+				$"Width: {schematicFromBase64.Width}\n" +
+				$"Height: {schematicFromBase64.Height}\n" +
+				$"Version: {schematicFromBase64.Version}\n" +
 				$"Tags:\n\t{tagsString}\n" +
 				$"Tiles:\n\t{tilesString}");
 
@@ -35,10 +41,12 @@ namespace MindustrySchematics.Deserializer.ConsoleApp
 			Directory.CreateDirectory("sprites-render");
 			SchematicVisualizer.RenderSprite(atlasSpriteSet.Sprites["titanium-conveyor-0-0"], "sprites-render/titanium-conveyor-0-0.png");
 
-			SchematicVisualizer.SaveToFile(schematic, atlas, "sprites-render/schematic.png");
+			SchematicVisualizer.SaveToFile(schematicFromBase64, atlas, "sprites-render/schematic-read-base64.png");
+			SchematicVisualizer.SaveToFile(schematicFromFileStream, atlas, "sprites-render/schematic-read-stream.png");
+			SchematicVisualizer.SaveToFile(schematicFromBytes, atlas, "sprites-render/schematic-read-bytes.png");
 
-			await using var stream = SchematicVisualizer.RenderToStream(schematic, atlas);
-			await using var file = File.Create("sprites-render/schematic-stream.png");
+			await using var stream = SchematicVisualizer.RenderToStream(schematicFromBase64, atlas);
+			await using var file = File.Create("sprites-render/schematic-render-stream.png");
 			await stream.CopyToAsync(file);
 			await file.FlushAsync();
 			file.Close();

@@ -14,18 +14,43 @@ namespace MindustrySchematics.Deserializer
 	{
 		private static readonly byte[] Header = Encoding.UTF8.GetBytes("msch");
 
-		public static async Task<Schematic> Deserialize(string base64)
+		public static Task<Schematic> Deserialize(string base64)
 		{
-			var bytes = Convert.FromBase64String(base64);
+			byte[] bytes;
+			try
+			{
+				bytes = Convert.FromBase64String(base64);
+			}
+			catch (Exception ex)
+			{
+				throw new DeserializationException(DeserializationExceptionReason.InvalidBase64, "Could not get base64 bytes from given string.", ex);
+			}
+
+			return Deserialize(bytes);
+		}
+
+		public static async Task<Schematic> Deserialize(byte[] bytes)
+		{
 			using var memoryStream = new MemoryStream(bytes);
 
-			var header = memoryStream.ReadBytes(Header.Length);
+			return await Deserialize(memoryStream);
+		}
+
+		public static async Task<Schematic> Deserialize(Stream stream)
+		{
+			if (!stream.CanRead || !stream.CanSeek)
+				throw new InvalidOperationException("A readable and seekable stream is required to deserialize a schematic.");
+
+			if (stream.Length < Header.Length)
+				throw new DeserializationException(DeserializationExceptionReason.MissingMschHeader, "Invalid schematic, stream smaller than first header bytes");
+
+			var header = stream.ReadBytes(Header.Length);
 			if (!header.SequenceEqual(Header))
-				throw new InvalidOperationException("Invalid schematic, did not find expected header bytes.");
+				throw new DeserializationException(DeserializationExceptionReason.MissingMschHeader, "Invalid schematic, did not find expected header bytes.");
 
-			var version = (byte) memoryStream.ReadByte();
+			var version = (byte)stream.ReadByte();
 
-			var decompressed = await ZlibDecompresser.Decompress(memoryStream);
+			var decompressed = await ZlibDecompresser.Decompress(stream);
 			var inflater = new InflaterInputStream(decompressed);
 
 			var width = inflater.ReadShort();
